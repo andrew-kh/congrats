@@ -7,7 +7,41 @@ library("RColorBrewer")
 filePath <- "/Users/andrew/Desktop/gz.txt"
 text <- readLines(filePath)
 
-ppl_names <- c("Катрин", "Марина", "Юлия", "Елена")
+ppl_names <- c("Юля",
+               "Марина",
+               "Лена",
+               "Настя",
+               "Лена",
+               "Юля",
+               "Юля",
+               "Ира",
+               "Катрин",
+               "Наташа",
+               "Оля",
+               "Лена",
+               "Аня")
+
+nice_things <- c("ослепительная",
+               "неповторимая",
+               "заботливая",
+               "лучезарная",
+               "грациозная",
+               "утончённая",
+               "искромётная",
+               "непредсказуемая",
+               "безупречная",
+               "сказочная",
+               "весёлая",
+               "энергичная",
+               "завораживающая")
+
+freqs <- c(
+  sample(1:5, 45, TRUE),
+  sample(10:15, 45, TRUE),
+  sample(20:25, 45, TRUE),
+  sample(30:35, 45, TRUE),
+  sample(40:45, 45, TRUE)
+)
 
 for (j in 1:length(ppl_names)) {
   
@@ -17,31 +51,29 @@ for (j in 1:length(ppl_names)) {
     vec <- c(vec, unlist(strsplit(text[i], " ", fixed = FALSE)))
   }
   
-  for (i in 1:length(text)) {
-    vec <- c(vec, unlist(strsplit(text[i], " ", fixed = FALSE)))
-  }
-  
   vec <- vec[nchar(vec) > 3]
   
   vec <- unique(vec)
   
-  df <- data.frame(vec, 1:length(vec))
+  df <- data.frame(vec, sample(freqs))
   
-  a <- data.frame("8 Марта!", 95)
-  b <- data.frame(ppl_names[j], 110)
+  a <- data.frame("8 Марта!", 80)
+  b <- data.frame(ppl_names[j], 120)
+  c <- data.frame(nice_things[j], 90)
   
   names(a) <- c("txt", "num")
   names(b) <- c("txt", "num")
+  names(c) <- c("txt", "num")
   names(df) <- c("txt", "num")
   
-  df[,2] <- sample(df[,2])
+  #df[,2] <- sample(df[,2])
   
   df <- rbind(df, a)
   df <- rbind(df, b)
+  df <- rbind(df, c)
   
-  tiff(paste0("plot", j, ".tiff"), width = 4, height = 4, units = 'in', res = 300)
-  wordcloud(words = df[,1], scale = c(3, 0.1),freq = df[,2], min.freq = 1,
-            max.words=200, random.order=FALSE, rot.per=0.35, 
-            colors=brewer.pal(8, "Dark2"))
+  tiff(paste0("/Users/andrew/Desktop/Programming/pics/", ppl_names[j], "-", j, ".tiff"), width = 4, height = 4, units = 'in', res = 300)
+  wordcloud(words = df[,1], scale = c(2, 0.1),freq = df[,2], min.freq = 1, random.order=FALSE, rot.per=0.35, 
+            colors=brewer.pal(5, "Dark2"))
   dev.off()
 }
