@@ -14,7 +14,7 @@ ppl_names <- c("Юля",
 nice_things <- c("ослепительная",
                "неповторимая",
                "искрометная")
-freqs <- c(
+freqs_set <- c(
   sample(1:5, 45, TRUE),
   sample(10:15, 45, TRUE),
   sample(20:25, 45, TRUE),
@@ -22,7 +22,7 @@ freqs <- c(
   sample(40:45, 45, TRUE)
 )
 
-for (j in 1:length(ppl_names)) {
+for (i in 1:length(ppl_names)) {
   
   vec <- unlist(lapply(text, 
                        function(txt_vec) 
@@ -32,27 +32,21 @@ for (j in 1:length(ppl_names)) {
     ))
   
   vec <- unique(vec[nchar(vec) > 3])
-  df <- data.frame(vec, sample(freqs))
   
-  a <- data.frame("8 Марта!", 80)
-  b <- data.frame(ppl_names[j], 120)
-  c <- data.frame(nice_things[j], 90)
+  df_auto <- data.frame(vec, sample(freqs_set))
+  names(df_auto) <- c("label", "freqs")
   
-  names(a) <- c("txt", "num")
-  names(b) <- c("txt", "num")
-  names(c) <- c("txt", "num")
-  names(df) <- c("txt", "num")
+  label <- c("8 Марта!", ppl_names[i], nice_things[i])
+  freqs <- c(80, 120, 90)
   
-  #df[,2] <- sample(df[,2])
+  df_custom <- data.frame(label, freqs)
   
-  df <- rbind(df, a)
-  df <- rbind(df, b)
-  df <- rbind(df, c)
+  df_final <- rbind(df_auto, df_custom)
   
-  tiff(paste0("/Users/andrew/Desktop/Programming/pics/", ppl_names[j], "-", j, ".tiff"), width = 4, height = 4, units = 'in', res = 300)
-  wordcloud(words = df[,1], scale = c(2, 0.1),freq = df[,2], min.freq = 1, random.order=FALSE, rot.per=0.35, 
-            colors=brewer.pal(5, "Dark2"))
+  #use tiff(file, width = 4, height = 4, units = 'in', res = 140) for print-quality
+  #use jpeg(file, width = 4, height = 4, units = 'in', res = 140) for preview
+  png(paste0("/Users/andrew/Desktop/Programming/congrats/", ppl_names[i], "-", i, ".png"), width = 4, height = 4, units = 'in', res = 140)
+  wordcloud(words = df_final[,1], scale = c(2, 0.1),freq = df_final[,2], min.freq = 1, random.order=FALSE, rot.per=0.35, 
+            colors=brewer.pal(3, "Dark2"))
   dev.off()
 }
-
-unlist(lapply(text, function(txt_vec) {unlist(strsplit(txt_vec, " ", fixed = FALSE))}))
