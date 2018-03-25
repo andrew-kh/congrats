@@ -9,32 +9,11 @@ text <- readLines(filePath)
 
 ppl_names <- c("Юля",
                "Марина",
-               "Лена",
-               "Настя",
-               "Лена",
-               "Юля",
-               "Юля",
-               "Ира",
-               "Катрин",
-               "Наташа",
-               "Оля",
-               "Лена",
-               "Аня")
+               "Лена")
 
 nice_things <- c("ослепительная",
                "неповторимая",
-               "заботливая",
-               "лучезарная",
-               "грациозная",
-               "утончённая",
-               "искромётная",
-               "непредсказуемая",
-               "безупречная",
-               "сказочная",
-               "весёлая",
-               "энергичная",
-               "завораживающая")
-
+               "искрометная")
 freqs <- c(
   sample(1:5, 45, TRUE),
   sample(10:15, 45, TRUE),
@@ -45,16 +24,14 @@ freqs <- c(
 
 for (j in 1:length(ppl_names)) {
   
-  vec <- vector()
+  vec <- unlist(lapply(text, 
+                       function(txt_vec) 
+                       {
+                         unlist(strsplit(txt_vec, " ", fixed = FALSE))
+                       }
+    ))
   
-  for (i in 1:length(text)) {
-    vec <- c(vec, unlist(strsplit(text[i], " ", fixed = FALSE)))
-  }
-  
-  vec <- vec[nchar(vec) > 3]
-  
-  vec <- unique(vec)
-  
+  vec <- unique(vec[nchar(vec) > 3])
   df <- data.frame(vec, sample(freqs))
   
   a <- data.frame("8 Марта!", 80)
@@ -77,3 +54,5 @@ for (j in 1:length(ppl_names)) {
             colors=brewer.pal(5, "Dark2"))
   dev.off()
 }
+
+unlist(lapply(text, function(txt_vec) {unlist(strsplit(txt_vec, " ", fixed = FALSE))}))
